@@ -52,11 +52,11 @@ public class StrategyGuide
             case 'B': return handShape.Paper;
             case 'C': return handShape.Scissors;
 
-            // Win
+            // Lose
             case 'X': return GetWinningHandShape(GetWinningHandShape(enemyHandShape));
             // Draw
             case 'Y': return enemyHandShape;
-            // Lose
+            // Win
             case 'Z': return GetWinningHandShape(enemyHandShape);
         }
 
