@@ -2,6 +2,12 @@
 
 public class StrategyGuide
 {
+    enum roundOutcome
+    {
+        Lose = 0,
+        Draw = 3,
+        Win = 6
+    }
     enum handShape
     {
         Rock = 1,
@@ -31,17 +37,13 @@ public class StrategyGuide
         return totalScore;
     }
 
-    private int GetRoundScore(handShape playerType, handShape enemyType) {
-        if (playerType == enemyType) {
-            return 3;
-        }
-        else if (playerType == handShape.Rock && enemyType == handShape.Paper ||
-            playerType == handShape.Paper && enemyType == handShape.Scissors || 
-            playerType == handShape.Scissors && enemyType == handShape.Rock) {
-            return 0;
-        }
+    private int GetRoundScore(handShape playerHandShape, handShape enemyHandShape)
+    {
+        if (playerHandShape == enemyHandShape) return (int) roundOutcome.Draw;
+        
+        if (GetWinningHandShape(enemyHandShape) == playerHandShape) return (int) roundOutcome.Win;
 
-        return 6;
+        return (int) roundOutcome.Lose;
     }
 
     private handShape GetHandShape(char letter)
@@ -60,5 +62,17 @@ public class StrategyGuide
         }
 
         throw new ArgumentException("Invalid hand shape type");
+    }
+
+    private handShape GetWinningHandShape(handShape enemyHandShape)
+    {
+        switch (enemyHandShape)
+        {
+            case handShape.Rock: return handShape.Paper;
+            case handShape.Paper: return handShape.Scissors;
+            case handShape.Scissors: return handShape.Rock;
+        }
+
+        throw new ArgumentException($"Invalid handshape: {enemyHandShape}");
     }
 }
