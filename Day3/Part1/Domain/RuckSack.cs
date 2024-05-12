@@ -31,7 +31,7 @@ public class RuckSack
             }
         }
 
-        throw new ArgumentException("each sack should contain exactly 1 matching item id, but none were found");
+        throw new ArgumentException("Error: each sack should contain exactly one matching item id, but none were found");
     }
 
     private int GetItemPriorityNumber(char itemId)

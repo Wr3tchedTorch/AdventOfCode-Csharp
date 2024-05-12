@@ -9,5 +9,6 @@ public class UnitTest1
 
     [Fact]
     public void TestExampleInput() => new RuckSack($"{baseUrl}\\files\\exampleInput.txt").PrioritySum().Should().Be(157);
-    public void TestPuzzleInput() => new RuckSack($"{baseUrl}\\files\\puzzleInput.txt").PrioritySum().Should().Be(157);
+    [Fact]
+    public void TestPuzzleInput() => new RuckSack($"{baseUrl}\\files\\puzzleInput.txt").PrioritySum().Should().Be(8202);
 }
