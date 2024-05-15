@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 public class SupplyStacks
 {
-    Dictionary<int, Queue<string>> stacksMap = new Dictionary<int, Queue<string>>();
+    Dictionary<int, Stack<string>> stacksMap = new Dictionary<int, Stack<string>>();
     string[] steps;
     public SupplyStacks(string filePath)
     {
@@ -24,15 +24,16 @@ public class SupplyStacks
     {
         for (int i = 1, offset = 0; i <= stacksCount; i++)
         {
-            Queue<string> cratesInThisColumn = new Queue<string>();
+            Stack<string> cratesInThisColumn = new Stack<string>();
 
-            foreach (string stack in cratesStack)
+            for (int j = cratesStack.Length - 1; j >= 0; j--)
             {
+                string stack = cratesStack[j];
                 string crate = stack.Substring(offset * 3 + offset, 3).Trim();
 
                 if (string.IsNullOrEmpty(crate.Trim())) continue;
 
-                cratesInThisColumn.Enqueue(crate);
+                cratesInThisColumn.Push(crate);
             }
 
             stacksMap.Add(i, cratesInThisColumn);
@@ -42,17 +43,38 @@ public class SupplyStacks
 
     public string GetTopCrates()
     {
-        throw new NotImplementedException();
-        
+        SortStacks();
+
+        string stacksTopCrates = "";
+        foreach (Stack<String> stack in stacksMap.Values)
+        {
+            stacksTopCrates += stack.Peek();
+        }
+        return Regex.Replace(stacksTopCrates, "[^a-zA-Z]", "");
     }
 
     private void SortStacks()
     {
-        throw new NotFiniteNumberException();
+        foreach (string step in steps)
+        {
+            int repeatCount = (int)char.GetNumericValue(step[0]);
+            int fromStack = (int)char.GetNumericValue(step[1]);
+            int toStack = (int)char.GetNumericValue(step[2]);
+
+            for (int i = 0; i < repeatCount; i++) ChangeCratePosition(fromStack, toStack);
+        }
     }
 
-    private void ChangeCratePosition()
+    private void ChangeCratePosition(int fromStackKey, int toStackKey)
     {
-        throw new NotImplementedException();
+        try
+        {
+            string crate = stacksMap[fromStackKey].Pop();
+            stacksMap[toStackKey].Push(crate);
+        }
+        catch (System.Exception)
+        {
+            throw new ArgumentException($"Error: there's no crate present on stack of id: {toStackKey}");
+        }
     }
 }
