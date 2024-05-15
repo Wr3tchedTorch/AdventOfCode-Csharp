@@ -9,9 +9,14 @@ public class SupplyStacks
     public SupplyStacks(string filePath)
     {
         string input = new StreamReader(filePath).ReadToEnd().Replace("\r", "");
+        ReadInput(input);
+    }
+
+    private void ReadInput(string input)
+    {
         string[] inputSplited = input.Split("\n\n");
 
-        steps = Regex.Replace(inputSplited[1], "[^0-9.\n]", "").Split("\n");
+        steps = Array.ConvertAll(Regex.Replace(inputSplited[1], "[^0-9.\n.' ']", "").Split("\n"), n => Regex.Replace(n.Trim(), @"\s+", " "));
         int stacksCount = Regex.Replace(inputSplited[0], "[^0-9.' ']", "").Trim().Split("   ").Length;
 
         string[] cratesStack = Utils.ReplaceLastOccurrence(Regex.Replace(inputSplited[0], "[0-9]", ""), "\n", "").Split("\n");
@@ -57,9 +62,10 @@ public class SupplyStacks
     {
         foreach (string step in steps)
         {
-            int repeatCount = (int)char.GetNumericValue(step[0]);
-            int fromStack = (int)char.GetNumericValue(step[1]);
-            int toStack = (int)char.GetNumericValue(step[2]);
+            int[] stepValues = Array.ConvertAll(step.Split(" "), n => int.Parse(n));
+            int repeatCount = stepValues[0];
+            int fromStack = stepValues[1];
+            int toStack = stepValues[2];
 
             for (int i = 0; i < repeatCount; i++) ChangeCratePosition(fromStack, toStack);
         }
@@ -67,14 +73,7 @@ public class SupplyStacks
 
     private void ChangeCratePosition(int fromStackKey, int toStackKey)
     {
-        try
-        {
-            string crate = stacksMap[fromStackKey].Pop();
-            stacksMap[toStackKey].Push(crate);
-        }
-        catch (System.Exception)
-        {
-            throw new ArgumentException($"Error: there's no crate present on stack of id: {toStackKey}");
-        }
+        string crate = stacksMap[fromStackKey].Pop();
+        stacksMap[toStackKey].Push(crate);
     }
 }

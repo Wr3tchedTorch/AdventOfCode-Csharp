@@ -8,4 +8,7 @@ public class SupplyStacksTest
 
     [Fact]
     public void TestExampleInput() => new SupplyStacks($"{basePath}/files/exampleInput.txt").GetTopCrates().Should().Be("CMZ");
+    
+    [Fact]
+    public void TestPuzzleInput() => new SupplyStacks($"{basePath}/files/puzzleInput.txt").GetTopCrates().Should().Be("QMBMJDFTD");
 }
