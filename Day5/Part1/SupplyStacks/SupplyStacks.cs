@@ -1,26 +1,35 @@
 ﻿namespace SupplyStacks;
-using System.Collections;
 using System.Text.RegularExpressions;
 
 public class SupplyStacks
 {
     Dictionary<int, Stack<string>> stacksMap = new Dictionary<int, Stack<string>>();
-    string[] steps;
+    List<List<int>> steps = new List<List<int>>();
     public SupplyStacks(string filePath)
     {
         string input = new StreamReader(filePath).ReadToEnd().Replace("\r", "");
-        ReadInput(input);
+
+        ParseInstructions("move", input);
+        ParseInstructions("from", input);
+        ParseInstructions("to", input);
+
+        ParseStacksMap(input);
     }
 
-    private void ReadInput(string input)
+    private void ParseInstructions(string instructionName, string input)
     {
-        string[] inputSplited = input.Split("\n\n");
+        List<int> valuesList = new List<int>();
+        foreach (Match match in Regex.Matches(input, $@"(?<={instructionName}\s)\d+")) valuesList.Add(int.Parse(match.Value));
+        steps.Add(valuesList);
+    }
 
-        steps = Array.ConvertAll(Regex.Replace(inputSplited[1], "[^0-9.\n.' ']", "").Split("\n"), n => Regex.Replace(n.Trim(), @"\s+", " "));
-        int stacksCount = Regex.Replace(inputSplited[0], "[^0-9.' ']", "").Trim().Split("   ").Length;
+    private void ParseStacksMap(string input)
+    {
+        string cratesInput = input.Split("\n\n")[0];
+        string cratesInputWithoutNumbers = Regex.Replace(cratesInput, @"[0-9]", " ");
 
-        string[] cratesStack = Utils.ReplaceLastOccurrence(Regex.Replace(inputSplited[0], "[0-9]", ""), "\n", "").Split("\n");
-        cratesStack[cratesStack.Length - 1] = cratesStack[cratesStack.Length - 1].Trim();
+        string[] cratesStack = Regex.Replace(cratesInputWithoutNumbers, @"\n\s+$", "").Split("\n");
+        int stacksCount = Regex.Matches(cratesInput, @"[0-9]").Count();
 
         SetStacksMap(stacksCount, cratesStack);
     }
@@ -60,14 +69,13 @@ public class SupplyStacks
 
     private void SortStacks()
     {
-        foreach (string step in steps)
+        for (int i = 0; i < steps[0].Count; i++)
         {
-            int[] stepValues = Array.ConvertAll(step.Split(" "), n => int.Parse(n));
-            int repeatCount = stepValues[0];
-            int fromStack = stepValues[1];
-            int toStack = stepValues[2];
+            int repeatCount = steps[0][i];
+            int fromStack = steps[1][i];
+            int toStack = steps[2][i];
 
-            for (int i = 0; i < repeatCount; i++) ChangeCratePosition(fromStack, toStack);
+            for (int j = 0; j < repeatCount; j++) ChangeCratePosition(fromStack, toStack);
         }
     }
 
