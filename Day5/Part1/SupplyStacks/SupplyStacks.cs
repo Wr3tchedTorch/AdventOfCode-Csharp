@@ -4,23 +4,24 @@ using System.Text.RegularExpressions;
 public class SupplyStacks
 {
     Dictionary<int, Stack<string>> stacksMap = new Dictionary<int, Stack<string>>();
-    List<List<int>> steps = new List<List<int>>();
+    List<int>[] steps = new List<int>[3];
     public SupplyStacks(string filePath)
     {
         string input = new StreamReader(filePath).ReadToEnd().Replace("\r", "");
 
-        ParseInstructions("move", input);
-        ParseInstructions("from", input);
-        ParseInstructions("to", input);
+        ParseInstructions("move", input, 0);
+        ParseInstructions("from", input, 1);
+        ParseInstructions("to", input, 2);
 
         ParseStacksMap(input);
     }
 
-    private void ParseInstructions(string instructionName, string input)
+    private void ParseInstructions(string instructionName, string input, int index)
     {
         List<int> valuesList = new List<int>();
         foreach (Match match in Regex.Matches(input, $@"(?<={instructionName}\s)\d+")) valuesList.Add(int.Parse(match.Value));
-        steps.Add(valuesList);
+
+        steps[index] = valuesList;
     }
 
     private void ParseStacksMap(string input)
