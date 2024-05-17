@@ -71,17 +71,22 @@ public class SupplyStacks
     {
         for (int i = 0; i < steps[0].Count; i++)
         {
-            int repeatCount = steps[0][i];
+            int cratesQnt = steps[0][i];
             int fromStack = steps[1][i];
             int toStack = steps[2][i];
 
-            for (int j = 0; j < repeatCount; j++) ChangeCratePosition(fromStack, toStack);
+            ChangeCratePosition(fromStack, toStack, cratesQnt);
         }
     }
 
-    private void ChangeCratePosition(int fromStackKey, int toStackKey)
+    private void ChangeCratePosition(int fromStackKey, int toStackKey, int cratesQnt)
     {
-        string crate = stacksMap[fromStackKey].Pop();
-        stacksMap[toStackKey].Push(crate);
+        for (int i = cratesQnt - 1; i >= 0; i--)
+        {
+            string crate = stacksMap[fromStackKey].ElementAt(i);
+            stacksMap[toStackKey].Push(crate);
+        }
+
+        for (int i = 0; i < cratesQnt; i++) stacksMap[fromStackKey].Pop();
     }
 }

@@ -10,5 +10,5 @@ public class SupplyStacksTest
     public void TestExampleInput() => new SupplyStacks($"{basePath}/files/exampleInput.txt").GetTopCrates().Should().Be("MCD");
     
     [Fact]
-    public void TestPuzzleInput() => new SupplyStacks($"{basePath}/files/puzzleInput.txt").GetTopCrates().Should().Be("QMBMJDFTD");
+    public void TestPuzzleInput() => new SupplyStacks($"{basePath}/files/puzzleInput.txt").GetTopCrates().Should().Be("NBTVTJNFJ");
 }
