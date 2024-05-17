@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupplyStacksTest", "SupplyStacksTest\SupplyStacksTest.csproj", "{FB70BC03-D931-4548-8208-9C53B3F0229D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupplyStacks", "SupplyStacks\SupplyStacks.csproj", "{7A838716-42C8-428D-BF9C-1A343D4DDBCB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FB70BC03-D931-4548-8208-9C53B3F0229D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB70BC03-D931-4548-8208-9C53B3F0229D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB70BC03-D931-4548-8208-9C53B3F0229D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB70BC03-D931-4548-8208-9C53B3F0229D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A838716-42C8-428D-BF9C-1A343D4DDBCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A838716-42C8-428D-BF9C-1A343D4DDBCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A838716-42C8-428D-BF9C-1A343D4DDBCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A838716-42C8-428D-BF9C-1A343D4DDBCB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
