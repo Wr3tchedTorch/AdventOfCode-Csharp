@@ -5,8 +5,7 @@ public class TuningTrouble
     string input;
     public TuningTrouble(string inputPath)
     {
-        string input = new StreamReader(inputPath).ReadToEnd();
-        this.input = input;
+        input = new StreamReader(inputPath).ReadToEnd();
     }
 
     public int GetStartOfPacketMarker()
@@ -14,15 +13,15 @@ public class TuningTrouble
         return GetStartOfPacketMarker(0);
     }
 
-    private int GetStartOfPacketMarker(int previousIndex)
+    private int GetStartOfPacketMarker(int index)
     {
-        if (previousIndex >= input.Length - 5) return previousIndex+1;
+        System.Console.WriteLine("AAAAAAAAAAAARG");
 
-        string sequence = input.Substring(previousIndex, 4);
+        string sequence = input.Substring(index, 4);
 
-        if (!HasDuplicate(sequence.ToCharArray())) return previousIndex+1;
+        if (!HasDuplicate(sequence.ToCharArray())) return index + 4;
 
-        return GetStartOfPacketMarker(previousIndex + 4);
+        return GetStartOfPacketMarker(index + 1);
     }
 
     private bool HasDuplicate(char[] array)

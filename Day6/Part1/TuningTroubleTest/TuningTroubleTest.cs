@@ -9,6 +9,7 @@ public class TuningTroubleTest
 
     [Fact]
     public void TestFirstSample() => new TuningTrouble($"{basePath}/files/firstSample.txt").GetStartOfPacketMarker().Should().Be(5);
+    
     [Fact]
-    public void TestSecondSample() => new TuningTrouble($"{basePath}/files/secondSample.txt").GetStartOfPacketMarker().Should().Be(5);
+    public void TestSecondSample() => new TuningTrouble($"{basePath}/files/secondSample.txt").GetStartOfPacketMarker().Should().Be(6);
 }
