@@ -1,7 +1,25 @@
-using System.Collections;
+public class Directory
+{
+    public string Name { get; }
+    private string parentName;
+    private Dictionary<string, Directory> directories = [];
+    public int MemorySize
+    {
+        get { return MemorySize; }
+        set
+        {
+            if (!string.IsNullOrEmpty(parentName)) {
+                directories[parentName].MemorySize += value;
+            }
+            MemorySize += value;
+        }
+    }
 
-public class Directory {
-    public int TotalSize { get; set; } = 0;
-    public int Size { get; set; } = 0;
-    public ArrayList<Directory> chidren = [];
+    public Directory(string name, string parentName, Dictionary<string, Directory> directories)
+    {
+        this.parentName  = parentName;
+        this.directories = directories;
+        
+        Name = name;
+    }
 }
