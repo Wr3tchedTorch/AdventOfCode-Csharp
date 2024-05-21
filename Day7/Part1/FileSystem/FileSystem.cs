@@ -7,25 +7,54 @@ public class FileSystem
     public FileSystem(string filePath)
     {
         input = new StreamReader(filePath).ReadToEnd();
-        input = Regex.Replace(input, @"\$\s\w{2}\s\.\.", "");
         input = input.Replace("\r", "");
+        input = Regex.Replace(input, @"\$\s\w{2}\s\.\.\n", "");
         SetDirectories();
     }
 
     public void SetDirectories()
     {
-        // Regex to get CD commands: (?<=\$\scd\s)\w{1}
-        // Regex to remove commands after reading: \$.+
-        string currentDirectory = "";
+        while (input.Length > 0)
+        {
+            string currentDirectory = "";
 
-        if (directories.Count == 0) currentDirectory = "/";
-        currentDirectory = Regex.Match(input, @"(?<=\$\scd\s)\w{1}").Value;
+            if (directories.Count == 0) currentDirectory = "/";
+            else currentDirectory = Regex.Match(input, @"(?<=\$\scd\s)\w{1}").Value;
 
-        Regex replaceCommands = new Regex(@"\$.+\n");
-        input = replaceCommands.Replace(input, "", 2);
+            string parentDir = "";
+            if (directories.ContainsKey(currentDirectory)) parentDir = directories[currentDirectory].ParentName;
 
-        string[] dirContents = Regex.Replace(input.Substring(0, input.IndexOf("$")), @"\n$", "").Split("\n");
-        System.Console.WriteLine(dirContents);
+            Directory newDir = new Directory(currentDirectory, parentDir, directories);
+
+            Regex replaceCommands = new Regex(@"\$.+\n");
+            input = replaceCommands.Replace(input, "", 2);
+
+            int endOfLine = input.IndexOf("$") == -1 ? input.Length : input.IndexOf("$");
+            string[] dirContents = Regex.Replace(input.Substring(0, endOfLine), @"\n$", "").Split("\n");
+            input = input.Substring(endOfLine);
+            foreach (string line in dirContents)
+            {
+                if (Regex.Match(line, @"\d+").Success)
+                {
+                    int memory = int.Parse(Regex.Match(line, @"\d+").Value);
+                    newDir.MemorySize += memory;
+                    UpdateParentMemorySize(newDir.ParentName, memory);
+                    continue;
+                }
+
+                Directory childDir = new Directory(Regex.Match(line, @"(?<=dir\s)\w+").Value, currentDirectory, directories);
+                directories.Add(childDir.Name, childDir);
+            }
+            directories[currentDirectory] = newDir;
+        }
+    }
+
+    public void UpdateParentMemorySize(string parentName, int size)
+    {
+        if (string.IsNullOrEmpty(parentName)) return;
+        directories[parentName].MemorySize += size;
+
+        UpdateParentMemorySize(directories[parentName].ParentName, size);
     }
 
     public int GetSumOfDeletableFiles()
