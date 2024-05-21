@@ -7,8 +7,8 @@ public class FileSystem
     public FileSystem(string filePath)
     {
         input = new StreamReader(filePath).ReadToEnd();
-        input = input.Replace("\r", "");
-        input = Regex.Replace(input, @"\$\s\w{2}\s\.\.\n", "");
+        input = Regex.Replace(input.Replace("\r", ""), @"\$\s\w{2}\s\.\.\n", "");
+        
         SetDirectories();
     }
 
