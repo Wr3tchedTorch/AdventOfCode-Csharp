@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Numerics;
+using System.Text.RegularExpressions;
 
 public class FileSystem
 {
@@ -8,45 +9,65 @@ public class FileSystem
     {
         input = new StreamReader(filePath).ReadToEnd();
         input = Regex.Replace(input.Replace("\r", ""), @"\$\s\w{2}\s\.\.\n", "");
-        
+
         SetDirectories();
     }
 
     public void SetDirectories()
     {
-        while (input.Length > 0)
+        if (input.Length <= 0) return;
+
+        string currentDirectory = ParseNextDirectory();
+        string parentDir = GetParentDirectory(currentDirectory);
+
+        Regex replaceCommands = new Regex(@"\$.+\n");
+        input = replaceCommands.Replace(input, "", 2);
+
+        string[] dirContents = GetDirectoryContents();
+        directories[currentDirectory] = ParseDirectoryContent(dirContents, new Directory(currentDirectory, parentDir, directories));
+
+        SetDirectories();
+    }
+
+    private Directory ParseDirectoryContent(string[] dirContents, Directory dir)
+    {
+        foreach (string line in dirContents)
         {
-            string currentDirectory = "";
-
-            if (directories.Count == 0) currentDirectory = "/";
-            else currentDirectory = Regex.Match(input, @"(?<=\$\scd\s)\w{1}").Value;
-
-            string parentDir = "";
-            if (directories.ContainsKey(currentDirectory)) parentDir = directories[currentDirectory].ParentName;
-
-            Directory newDir = new Directory(currentDirectory, parentDir, directories);
-
-            Regex replaceCommands = new Regex(@"\$.+\n");
-            input = replaceCommands.Replace(input, "", 2);
-
-            int endOfLine = input.IndexOf("$") == -1 ? input.Length : input.IndexOf("$");
-            string[] dirContents = Regex.Replace(input.Substring(0, endOfLine), @"\n$", "").Split("\n");
-            input = input.Substring(endOfLine);
-            foreach (string line in dirContents)
+            if (Regex.Match(line, @"\d+").Success)
             {
-                if (Regex.Match(line, @"\d+").Success)
-                {
-                    int memory = int.Parse(Regex.Match(line, @"\d+").Value);
-                    newDir.MemorySize += memory;
-                    UpdateParentMemorySize(newDir.ParentName, memory);
-                    continue;
-                }
-
-                Directory childDir = new Directory(Regex.Match(line, @"(?<=dir\s)\w+").Value, currentDirectory, directories);
-                directories.Add(childDir.Name, childDir);
+                int memory = int.Parse(Regex.Match(line, @"\d+").Value);
+                dir.MemorySize += memory;
+                UpdateParentMemorySize(dir.ParentName, memory);
+                continue;
             }
-            directories[currentDirectory] = newDir;
+
+            Directory childDir = new Directory(Regex.Match(line, @"(?<=dir\s)\w+").Value, dir.Name, directories);
+            directories.Add(childDir.Name, childDir);
         }
+
+        return dir;
+    }
+
+    private string ParseNextDirectory()
+    {
+        if (directories.Count == 0) return "/";
+
+        return Regex.Match(input, @"(?<=\$\scd\s)\w{1}").Value;
+    }
+
+    private string GetParentDirectory(string dir)
+    {
+        if (directories.ContainsKey(dir)) return directories[dir].ParentName;
+
+        return "";
+    }
+
+    private string[] GetDirectoryContents()
+    {
+        int endOfLine = input.IndexOf("$") == -1 ? input.Length : input.IndexOf("$");
+        string[] dirContents = Regex.Replace(input.Substring(0, endOfLine), @"\n$", "").Split("\n");
+        input = input.Substring(endOfLine);
+        return dirContents;
     }
 
     public void UpdateParentMemorySize(string parentName, int size)
@@ -58,7 +79,7 @@ public class FileSystem
     }
 
     public int GetSumOfDeletableFiles()
-    {
+    {       
         throw new NotImplementedException();
     }
 }
