@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 public class FileSystem
 {
@@ -45,10 +44,9 @@ public class FileSystem
             Directory childDir = new Directory(Regex.Match(line, @"(?<=dir\s)\w+").Value, dir.Name);
             if (directories.ContainsKey(childDir.Name))
             {
-                childDir.Name = $"{childDir.Name}{id}";
-                Regex renameDir = new Regex(@"\sa\s");
-                input = renameDir.Replace(input, $" {childDir.Name}\n", 2);
-                id++;
+                childDir.Name = $"{childDir.Name}{id++}";
+                Regex renameDir = new Regex(@"(?<=cd|dir)\s.+\s");
+                input = renameDir.Replace(input, $" {childDir.Name}\n", 1);
             }
 
             directories.Add(childDir.Name, childDir);
