@@ -2,11 +2,11 @@ public class Directory
 {
     public string Name { get; }
     public string ParentName { get; }
-    public int MemorySize { get; set; }
+    public long MemorySize { get; set; }
 
     public Directory(string name, string parentName)
     {
-        this.ParentName = parentName;
+        ParentName = parentName;
         Name = name;
     }
 }

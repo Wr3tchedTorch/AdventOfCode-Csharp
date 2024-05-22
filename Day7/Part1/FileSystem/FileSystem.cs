@@ -5,6 +5,7 @@ public class FileSystem
 {
     Dictionary<string, Directory> directories = [];
     private string input;
+    private int id;
     public FileSystem(string filePath)
     {
         input = new StreamReader(filePath).ReadToEnd();
@@ -35,13 +36,19 @@ public class FileSystem
         {
             if (Regex.Match(line, @"\d+").Success)
             {
-                int memory = int.Parse(Regex.Match(line, @"\d+").Value);
+                long memory = long.Parse(Regex.Match(line, @"\d+").Value);
                 dir.MemorySize += memory;
                 UpdateParentMemorySize(dir.ParentName, memory);
                 continue;
             }
 
-            Directory childDir = new Directory(Regex.Match(line, @"(?<=dir\s)\w+").Value, dir.Name);
+            Directory childDir = new Directory(Regex.Match(line, @"(?<=dir\s)\w+").Value, dir.Name);        
+            if (directories.ContainsKey(childDir.Name)) {
+                directories.Add($"{childDir.Name}{id}", childDir);
+                id++;
+                continue;
+            }
+
             directories.Add(childDir.Name, childDir);
         }
 
@@ -70,7 +77,7 @@ public class FileSystem
         return dirContents;
     }
 
-    public void UpdateParentMemorySize(string parentName, int size)
+    public void UpdateParentMemorySize(string parentName, long size)
     {
         if (string.IsNullOrEmpty(parentName)) return;
         directories[parentName].MemorySize += size;
@@ -78,8 +85,14 @@ public class FileSystem
         UpdateParentMemorySize(directories[parentName].ParentName, size);
     }
 
-    public int GetSumOfDeletableFiles()
-    {       
-        throw new NotImplementedException();
+    public long GetSumOfDeletableFiles()
+    {
+        long total = 0;
+        foreach (Directory dir in directories.Values)
+        {
+            if (dir.MemorySize <= 100000) total += dir.MemorySize;
+        }
+
+        return total;
     }
 }
