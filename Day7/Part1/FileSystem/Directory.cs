@@ -1,6 +1,6 @@
 public class Directory
 {
-    public string Name { get; }
+    public string Name { get; set; }
     public string ParentName { get; }
     public long MemorySize { get; set; }
 

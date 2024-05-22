@@ -42,11 +42,13 @@ public class FileSystem
                 continue;
             }
 
-            Directory childDir = new Directory(Regex.Match(line, @"(?<=dir\s)\w+").Value, dir.Name);        
-            if (directories.ContainsKey(childDir.Name)) {
-                directories.Add($"{childDir.Name}{id}", childDir);
+            Directory childDir = new Directory(Regex.Match(line, @"(?<=dir\s)\w+").Value, dir.Name);
+            if (directories.ContainsKey(childDir.Name))
+            {
+                childDir.Name = $"{childDir.Name}{id}";
+                Regex renameDir = new Regex(@"\sa\s");
+                input = renameDir.Replace(input, $" {childDir.Name}\n", 2);
                 id++;
-                continue;
             }
 
             directories.Add(childDir.Name, childDir);
@@ -59,7 +61,7 @@ public class FileSystem
     {
         if (directories.Count == 0) return "/";
 
-        return Regex.Match(input, @"(?<=\$\scd\s)\w{1}").Value;
+        return Regex.Match(input, @"(?<=\$\scd\s)\w{1}.*").Value;
     }
 
     private string GetParentDirectory(string dir)
@@ -92,7 +94,6 @@ public class FileSystem
         {
             if (dir.MemorySize <= 100000) total += dir.MemorySize;
         }
-
         return total;
     }
 }
