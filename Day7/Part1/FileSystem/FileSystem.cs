@@ -24,7 +24,7 @@ public class FileSystem
         input = replaceCommands.Replace(input, "", 2);
 
         string[] dirContents = GetDirectoryContents();
-        directories[currentDirectory] = ParseDirectoryContent(dirContents, new Directory(currentDirectory, parentDir, directories));
+        directories[currentDirectory] = ParseDirectoryContent(dirContents, new Directory(currentDirectory, parentDir));
 
         SetDirectories();
     }
@@ -41,7 +41,7 @@ public class FileSystem
                 continue;
             }
 
-            Directory childDir = new Directory(Regex.Match(line, @"(?<=dir\s)\w+").Value, dir.Name, directories);
+            Directory childDir = new Directory(Regex.Match(line, @"(?<=dir\s)\w+").Value, dir.Name);
             directories.Add(childDir.Name, childDir);
         }
 
