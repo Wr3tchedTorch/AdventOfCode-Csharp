@@ -20,7 +20,15 @@ $ cd ..
 $ cd ..
 $ cd ad
 $ ls
-4060174 j
-8033020 d.log
-5626152 d.ext
-7214296 k
+dir a
+29116 f
+2557 g
+62596 h.lst
+$ cd a
+$ ls
+dir a
+$ cd a
+$ ls
+584 i
+$ cd ..
+$ cd ..
