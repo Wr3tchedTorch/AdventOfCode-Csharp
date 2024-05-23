@@ -9,5 +9,5 @@ public class FileSystemTest
     public void TestExampleSample() => new FileSystem($"{basePath}/files/exampleSample.txt").GetSumOfDeletableFiles().Should().Be(95437);
 
     [Fact]
-    public void TestPuzzleSample() => new FileSystem($"{basePath}/files/puzzleSample.txt").GetSumOfDeletableFiles().Should().Be(95437);
+    public void TestPuzzleSample() => new FileSystem($"{basePath}/files/puzzleSample.txt").GetSumOfDeletableFiles().Should().Be(1667443);
 }
