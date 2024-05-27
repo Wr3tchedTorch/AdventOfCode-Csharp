@@ -10,5 +10,5 @@ public class TreeHouseTest
     public void TestExampleSample() => new TreeHouse($"{BasePath}/files/exampleSample.txt").GetNumberOfVisibleTrees().Should().Be(21);
 
     [Fact]
-    public void TestPuzzleSample() => new TreeHouse($"{BasePath}/files/puzzleSample.txt").GetNumberOfVisibleTrees().Should().Be(21);
+    public void TestPuzzleSample() => new TreeHouse($"{BasePath}/files/puzzleSample.txt").GetNumberOfVisibleTrees().Should().Be(1812);
 }
